@@ -1,4 +1,4 @@
-name: EmbedPress Compatibility Testing
+name: QA - EmbedPress Compatibility Testing
 
 on:
   workflow_dispatch: # Manual trigger
@@ -17,7 +17,7 @@ jobs:
 
   compatibility-test:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
