@@ -16,7 +16,7 @@ jobs:
   plugin-check:
     needs: build
     runs-on: ubuntu-latest
-    name: WP Latest / PHP 8.4
+    name: Plugin Check - WP Latest / PHP 8.4
 
     steps:
       # 2. Setup PHP 8.4 + WP-CLI
@@ -78,4 +78,17 @@ jobs:
       - name: Run Plugin Check
         run: |
           cd test-site
-          wp plugin check embedpress --ignore-warnings --allow-root
+
+          # Redirect full output to a file — errors can be large (thousands of lines)
+          wp plugin check embedpress --ignore-warnings --allow-root 2>&1 | tee /tmp/pcp-output.txt || true
+
+          # Pass only if the output contains the exact success message
+          if grep -qF "Success: Checks complete. No errors found." /tmp/pcp-output.txt; then
+            echo "✅ Plugin Check passed — no errors found."
+          else
+            echo "❌ Plugin Check found errors:"
+            echo "------------------------------------------------------------"
+            cat /tmp/pcp-output.txt
+            echo "------------------------------------------------------------"
+            exit 1
+          fi
