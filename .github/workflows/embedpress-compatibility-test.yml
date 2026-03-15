@@ -66,7 +66,19 @@ jobs:
       # 4. Move the built plugin to the WP folder
       - name: Install and Activate EmbedPress
         run: |
-          mv ./embedpress-dist ./test-site/wp-content/plugins/embedpress
+          # 1. Create the target directory
+          mkdir -p ./test-site/wp-content/plugins/embedpress
+          
+          # 2. Move the contents. 
+          # We use '.' to ensure we move the files inside the artifact folder, 
+          # not the folder itself if it's nested.
+          cp -r ./embedpress-dist/. ./test-site/wp-content/plugins/embedpress/
+          
+          # 3. Debug: List files to confirm the entry file is in the right place
+          echo "Checking plugin directory structure:"
+          ls -R ./test-site/wp-content/plugins/embedpress | head -n 10
+          
+          # 4. Activate
           cd test-site
           wp plugin activate embedpress --allow-root
 
