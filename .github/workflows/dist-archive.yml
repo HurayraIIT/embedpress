@@ -17,6 +17,6 @@ jobs:
 
       - name: Generating zip
         uses: rudlinkon/action-wordpress-build-zip@master
-        with:
-          npm-run-build: true
-          install-composer: true
+        # with:
+        #   npm-run-build: true
+        #   install-composer: true
